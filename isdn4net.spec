@@ -17,6 +17,7 @@ BuildArch:	noarch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Conflicts:	isdn-light
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 This package provides several scripts to do networking with isdn4linux, several
