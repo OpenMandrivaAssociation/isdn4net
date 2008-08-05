@@ -1,7 +1,7 @@
 Summary:	Networking with the isdn subsystem
 Name:		isdn4net
 Version:	1.4.6
-Release:	%mkrel 15
+Release:	%mkrel 16
 License:	GPL
 Group:		System/Kernel and hardware
 URL:		http://www.isdn4net.berlios.de
@@ -43,10 +43,6 @@ install network-scripts/ifup-ippp %{buildroot}/%{_sysconfdir}/sysconfig/network-
 install network-scripts/ifdown-ippp %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts
 install network-scripts/ifup-isdn %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts
 install network-scripts/ifdown-isdn %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts
-
-# Install default config files
-install -m 644 defaults/ifcfg-ippp0 %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ippp0
-#install defaults/ifcfg-isdn0 %{buildroot}/%{_sysconfdir}/sysconfig/network-scripts/ifcfg-isdn0
 
 install -d %{buildroot}/%{_initrddir}
 install -m0755 init.d/isdn4linux %{buildroot}/%{_initrddir}
@@ -98,7 +94,6 @@ rm -fr %{buildroot}
 %{_initrddir}/isdnlog
 %{_bindir}/isdn
 %config(noreplace) %{_sysconfdir}/sysconfig/isdn
-%config(noreplace) %{_sysconfdir}/sysconfig/network-scripts/ifcfg-ippp0
 %config(noreplace) %{_sysconfdir}/isdn/profile/ippp.default
 %config(noreplace) %{_sysconfdir}/isdn/profile/isdn.default
 %config(noreplace) %{_sysconfdir}/isdn/profile/ippp.map
