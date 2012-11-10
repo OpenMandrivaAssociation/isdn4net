@@ -1,0 +1,78 @@
+--- init.d/isdn4linux.old	2003-06-24 13:57:36.000000000 +0200
++++ init.d/isdn4linux	2004-07-10 13:17:04.790839890 +0200
+@@ -61,8 +61,24 @@
+ 
+ 
+ # Load Card configuration
+-
+-. "$I4L_PROFILEDIR/card/$I4L_CARD"
++CARD=0
++for CARDS in $I4L_PROFILEDIR/card/* ; do 
++	. $CARDS
++	TEMP_MODULE[$CARD]=$I4L_MODULE
++	TEMP_TYPE[$CARD]=$I4L_TYPE 
++	TEMP_IRQ[$CARD]=$I4L_IRQ 
++	TEMP_MEMBASE[$CARD]=$I4L_MEMBASE 
++	TEMP_PORT[$CARD]=$I4L_PORT 
++	TEMP_IO0[$CARD]=$I4L_IO0 
++	TEMP_IO1[$CARD]=$I4L_IO1 
++	TEMP_ID[$CARD]=$I4L_ID 
++	TEMP_FIRMWARE[$CARD]=$I4L_FIRMWARE 
++	TEMP_PROTOCOL[$CARD]=$I4L_PROTOCOL 
++	let CARD++
++	I4L_MODULE="" ; I4L_TYPE="" ; I4L_IRQ="" ; IL_MEMBASE="" 
++	I4L_PORT="" ; I4L_IO0="" ; I4L_IO1="" ; I4L_ID=""
++	I4L_FIRMWARE="" ; I4L_PROTOCOL=""
++done
+ 
+ EXITCODE=1
+ 
+@@ -71,7 +87,7 @@
+ 	# Check that ISDN is up
+ 	[ ${I4L_START} = "no" ] && break
+ 
+-	if [ "$I4L_MODULE" = "" ] ; then
++	if [ "${TEMP_MODULE[*]}" = "" ] ; then
+ 		echo "ISDN-Module not defined in isdn4linux!"
+ 		break
+ 	fi
+@@ -84,6 +100,20 @@
+ 
+ 	'start')
+ 		touch $SYSCONF_FILE
++		CARD=0
++		for CARDS in $I4L_PROFILEDIR/card/* ; do 
++			I4L_MODULE=${TEMP_MODULE[$CARD]}
++			I4L_TYPE=${TEMP_TYPE[$CARD]}
++			I4L_IRQ=${TEMP_IRQ[$CARD]}
++			I4L_MEMBASE=${TEMP_MEMBASE[$CARD]}
++			I4L_PORT=${TEMP_PORT[$CARD]}
++			I4L_IO0=${TEMP_IO0[$CARD]}
++			I4L_IO1=${TEMP_IO1[$CARD]}
++			I4L_ID=${TEMP_ID[$CARD]}
++			I4L_FIRMWARE=${TEMP_FIRMWARE[$CARD]}
++			I4L_PROTOCOL=${TEMP_PROTOCOL[$CARD]}
++			let CARD++
++		
+ 		case "$I4L_MODULE" in
+ 
+ 		'teles')
+@@ -346,7 +376,8 @@
+ 	;;
+ 
+ 	esac
+-
++	done # loop through the cards
++	
+         # Configure kernel for dynamic ip mode
+         if [ -n ${I4L_DYN} ] ; then
+                 echo "Configuring kernel for dynamic ip re-routing"
+@@ -395,7 +426,7 @@
+ 	fi
+ 	echo "Unloading ISDN drivers ..."
+ 	# unload modules
+-		/sbin/modprobe -r $I4L_MODULE
++		/sbin/modprobe -r ${TEMP_MODULE[*]}
+ 	rm -f $SYSCONF_FILE
+ 	;;
+ 

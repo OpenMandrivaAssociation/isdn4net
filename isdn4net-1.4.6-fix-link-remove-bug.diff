@@ -1,0 +1,20 @@
+--- isdn4net-1.4.6.old/bin/isdn	2003-07-02 10:21:27.000000000 +0200
++++ isdn4net-1.4.6/bin/isdn	2004-08-29 17:24:29.182914544 +0200
+@@ -364,9 +364,16 @@
+                        # SOURCE MAPs
+                        . $PROFILE_DIR/ippp.map
+                        . $PROFILE_DIR/isdn.map
++                       TMPFILE=`mktemp -q /tmp/$0.XXXXXX`
++	               if [ $? -ne 0 ]; then
++	                      echo "$0: Can't create temp file, exiting..."
++	                      exit 1
++	               fi
++		       cp $PROFILE_DIR/ippp.map $TMPFILE
+                        if [ -n "${!DEVICE}" ] ; then
+ 			       echo "deactivationg profile $TARGET"
+-			       grep -v "$TARGET" < $PROFILE_DIR/ippp.map > $PROFILE_DIR/ippp.map
++			       grep -v "$TARGET" < $TMPFILE > $PROFILE_DIR/ippp.map
++			       [ $? == 0 ] && rm -f $TMPFILE
+ 			       rm -f /etc/sysconfig/network-scripts/ifcfg-$DEVICE
+ 			       echo "done."
+ 		       else

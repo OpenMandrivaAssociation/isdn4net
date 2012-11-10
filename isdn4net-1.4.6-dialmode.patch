@@ -1,0 +1,11 @@
+--- isdn4net-1.4.6/network-scripts/ifup-ippp.dams	2003-07-31 12:07:54.000000000 +0200
++++ isdn4net-1.4.6/network-scripts/ifup-ippp	2003-07-31 12:08:08.000000000 +0200
+@@ -108,7 +108,7 @@
+ isdnctrl secure $DEVICE $I4L_SECURE
+ 
+ # on demand (SV)
+-isdnctrl dialmode $SLAVE auto
++isdnctrl dialmode $DEVICE $I4L_DIALMODE
+ 
+ # automatic hangup if idle:
+ isdnctrl huptimeout $DEVICE ${I4L_IDLETIME}

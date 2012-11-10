@@ -1,0 +1,40 @@
+--- isdn4net-1.4.6/init.d/isdn4linux.udev	2004-09-13 21:36:51.707540736 +0200
++++ isdn4net-1.4.6/init.d/isdn4linux	2004-09-13 21:37:05.586430824 +0200
+@@ -47,6 +47,29 @@
+ 	break
+ }
+ 
++create_devices() 
++{
++mkdir -p /dev/isdn 
++# ippp, ttyI cui devices 
++i=0 
++for ((i ; i < 32; i++)); do 
++    majorippp=$((128+$i)) 
++    mknod /dev/isdn/ippp$i c 45 $majorippp ; ln -s /dev/isdn/ippp$i /dev/ippp$i 
++    mknod /dev/isdn/ttyI$i c 43 $i ; ln -s /dev/isdn/ttyI$i /dev/ttyI$i 
++    mknod /dev/isdn/cui$i c 44 $i ; ln -s /dev/isdn/cui$i /dev/cui$i 
++done 
++# isdnctrl 
++    mknod /dev/isdn/isdnctrl0 c 45 64 
++    mknod /dev/isdn/isdnctrl1 c 45 65 
++    ln -s /dev/isdn/isdnctrl0 /dev/isdn/isdnctrl 
++    ln -s /dev/isdn/isdnctrl0 /dev/isdnctrl0 
++    ln -s /dev/isdn/isdnctrl1 /dev/isdnctrl1 
++# isdninfo 
++    mknod /dev/isdn/isdninfo c 45 255 
++    ln -s /dev/isdn/isdninfo /dev/isdninfo 
++    echo "Device creation finished .." 
++}
++
+ if [ "$1" == "start" ]; then
+        echo "Starting ISDN for Linux..."
+ fi
+@@ -100,6 +123,7 @@
+ 
+ 	'start')
+ 		touch $SYSCONF_FILE
++		[ ! -c /dev/.devfsd ] && [ ! -c /dev/isdn/isdninfo ] && create_devices || echo "assuming isdn devices exist. "
+ 		CARD=0
+ 		for CARDS in $I4L_PROFILEDIR/card/* ; do 
+ 			I4L_MODULE=${TEMP_MODULE[$CARD]}

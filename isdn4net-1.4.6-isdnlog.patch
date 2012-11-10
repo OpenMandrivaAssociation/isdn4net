@@ -1,0 +1,49 @@
+--- isdn4net-1.4.6/init.d/isdnlog.old	2003-06-24 13:17:02.000000000 +0200
++++ isdn4net-1.4.6/init.d/isdnlog	2003-07-13 01:22:00.000000000 +0200
+@@ -61,6 +61,7 @@
+ 		if [ -z "$logpid" ] ; then
+ 			echo "Start isdnlog-daemon"
+ 			isdnlog -D -f /etc/isdn/my_isdnlog.conf /dev/isdnctrl0
++		        touch /var/lock/subsys/isdnlog
+ 		fi
+ 	fi
+ 	
+@@ -75,6 +76,7 @@
+ 		logpid=`cat /var/run/isdnlog.isdnctrl0.pid`		
+ 		kill $logpid > /dev/null 2>&1
+ 		rm -f /var/run/isdnlog.isdnctrl0.pid
++		rm /var/lock/subsys/isdnlog
+ 	fi
+ 
+ 	pid=`ps axww|grep -v grep|grep isdnlog |awk '{print $1}'` 
+@@ -85,11 +87,30 @@
+ 
+     ;;
+ 
++    'status')
++
++    	if [ -f /var/run/isdnlog.isdnctrl0.pid ] ; then
++		logpid=`cat /var/run/isdnlog.isdnctrl0.pid`
++		ps axww | grep -v grep | grep $logpid >& /dev/null
++		if [ $? -ne 0 ] ; then
++			echo "isdnlog is running"
++		else
++			echo "isdnlog is stoped, but /var/run/isdnlog.isdnctrl0.pid still exists"
++		fi
++	else
++		echo "isdnlog is stoped"
++	fi
++
++    ;;
++
+     'restart')
+ 	$0 stop
+ 	$0 start
+ 	;;
+ 
++    'reload')
++        ;;
++
+     *)
+ 	usage
+ 	break

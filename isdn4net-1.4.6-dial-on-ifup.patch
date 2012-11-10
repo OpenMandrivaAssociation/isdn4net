@@ -1,0 +1,13 @@
+Index: network-scripts/ifup-ippp
+===================================================================
+--- network-scripts/ifup-ippp
++++ network-scripts/ifup-ippp	2004-07-22 12:05:00.592079934 +0200
+@@ -272,4 +272,8 @@
+ /etc/sysconfig/network-scripts/ifup-post $CONFIG
+ echo
+ 
++if [ "$DIAL_ON_IFUP" = "yes" ]; then
++    /usr/sbin/isdnctrl dial $DEVICE
++fi
++
+ exit 0
