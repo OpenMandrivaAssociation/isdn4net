@@ -1,7 +1,7 @@
 Summary:	Networking with the isdn subsystem
 Name:		isdn4net
 Version:	1.4.6
-Release:	33
+Release:	34
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://www.isdn4net.berlios.de
