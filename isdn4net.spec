@@ -4,7 +4,7 @@ Version:	1.4.6
 Release:	34
 License:	GPLv2
 Group:		System/Kernel and hardware
-Url:		http://www.isdn4net.berlios.de
+Url:		https://www.isdn4net.berlios.de
 Source0:	%{name}-%{version}.tar.bz2
 Patch0:         isdn4net-1.4.6-isdnlog.patch
 Patch1:         isdn4net-1.4.6-dialmode.patch
